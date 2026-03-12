@@ -3,17 +3,16 @@ import fetch from "node-fetch";
 
 const app = express();
 
-// Accept all raw bodies (needed for POST, Firebase, etc.)
+// Needed for POST bodies (Firebase, login, etc.)
 app.use(express.raw({ type: "*/*" }));
 
 app.use(async (req, res) => {
   try {
     const target = "https://flashchat13.base44.app" + req.originalUrl;
 
-    // Only include body for non-GET/HEAD requests
     const hasBody = !["GET", "HEAD"].includes(req.method);
 
-    const response = await fetch(target, {
+    const upstream = await fetch(target, {
       method: req.method,
       headers: {
         ...req.headers,
@@ -22,15 +21,17 @@ app.use(async (req, res) => {
       body: hasBody ? req.body : undefined
     });
 
-    // Copy status + headers
-    res.status(response.status);
-    response.headers.forEach((value, key) => {
+    // Copy status
+    res.status(upstream.status);
+
+    // Copy headers EXACTLY
+    upstream.headers.forEach((value, key) => {
       res.setHeader(key, value);
     });
 
-    // Send binary-safe response
-    const body = await response.buffer();
-    res.send(body);
+    // Send raw buffer (fixes MIME issues)
+    const buffer = await upstream.buffer();
+    res.send(buffer);
 
   } catch (err) {
     console.error("Proxy error:", err);

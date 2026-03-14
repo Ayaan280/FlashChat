@@ -1,5 +1,17 @@
-<style>
-  body { margin: 0; padding: 0; overflow: hidden; }
-  iframe { width: 100vw; height: 100vh; border: none; }
-</style>
-<iframe src="https://flashchat13.base44.app"></iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App Website</title>
+    <!-- Load the x-frame-bypass component -->
+    <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
+</head>
+<body style="margin: 0; padding: 0; overflow: hidden;">
+    <!-- Use the special iframe tag -->
+    <iframe is="x-frame-bypass" 
+            src="https://your-app.base44.app" 
+            style="width: 100%; height: 100vh; border: none;">
+    </iframe>
+</body>
+</html>
